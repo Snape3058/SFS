@@ -1,11 +1,19 @@
 #include "main.h"
 
-int cli(char * pwd, char * cmdstr)
+int cli(char * filename, char * pwd, char * cmdstr, char ** cmdpar)
 {
 	char cmd[1025];
-	printf("sfs:%s ] ", pwd);
+	printf("%s:%s ] ", filename, pwd);
 	fgets(cmdstr, 1024, stdin);
 	sscanf(cmdstr, "%s", cmd);
+	for ( * cmdpar = cmdstr; 
+		*(*cmdpar) != '\0' && *(*cmdpar) != ' '; 
+		(*cmdpar) ++ 
+	);
+	while ( ' ' == *(*cmdpar) )
+	{
+		(*cmdpar) ++;
+	}
 	if ( ! strcmp(cmd, "exit") )
 	{
 		return -1;
@@ -68,23 +76,24 @@ int cli(char * pwd, char * cmdstr)
 
 void cmderror()
 {
-	printf("Command cannot be understand.\n");
+	printf("\033[31m>>> Command cannot be understand.\033[0m\n");
 	return ;
 }
 
-int main()
+int main(int argc, char * argv[])
 {
 	int cmd;
-	char cmdstr[1025], pwd[1024] = "(NULL)";
-	while ( ~ (cmd = cli(pwd, cmdstr)) )
+	char cmdstr[1025], filename[1024] = "(NULL)", pwd[1024] = "";
+	char * cmdpar;
+	while ( ~ (cmd = cli(filename, pwd, cmdstr, &cmdpar)) )
 	{
-		//printf("%d %s\n", cmd, cmdstr);
+		printf("%d %s\n%s\n", cmd, cmdstr, cmdpar);
 		switch ( cmd )
 		{
 			case  0: cmderror(); break;
-			case  1: New(cmdstr, pwd); break;
+			case  1: New(filename, cmdpar, pwd, &disk, &status); break;
 			case  2: break;
-			case  3: break;
+			case  3: Mkdir(pwd, cmdpar, disk, &status); break;
 			case  4: break;
 			case  5: break;
 			case  6: break;

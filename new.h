@@ -5,6 +5,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-void New(char * cmdstr, char * pwd);
+#include "structure.h"
+
+const int diskSize = 2 * 1024 * 1024;
+
+void New(
+	char * filename, 
+	char * cmdstr, 
+	char * pwd, 
+	char ** disk,
+	sysStatus * pstatus
+);
 
 #endif

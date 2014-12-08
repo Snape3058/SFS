@@ -5,7 +5,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "structure.h"
 #include "new.h"
+#include "Mkdir.h"
+
+char * disk = NULL;
+sysStatus status;
 
 #endif
 

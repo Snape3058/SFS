@@ -5,7 +5,7 @@ objs = ${patsubst %.c, %.o, $(wildcard *.c)}
 sfs: $(objs)
 	$(cc) $(objs) -g -o sfs
 
-$(objs): %.o: %.c
+$(objs): %.o: %.c %.h structure.h
 	$(cc) -c $< -o $@ -g
 
 .PHONY: clean
