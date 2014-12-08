@@ -37,4 +37,6 @@ typedef struct sysStatus
 	int pwd;
 }sysStatus;
 
+void initFCB(sysStatus* pstatus, int x, boolean flagFoder);
+
 #endif
