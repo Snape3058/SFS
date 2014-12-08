@@ -3,6 +3,8 @@
 
 #include <time.h>
 
+const char True = 1;
+const char False = 0;
 typedef char boolean;
 
 typedef struct IB
@@ -32,6 +34,7 @@ typedef struct sysStatus
 	int free_fcb;
 	int free_ib;
 	int full_fcb;
+	int pwd;
 }sysStatus;
 
 #endif

@@ -9,6 +9,7 @@ void New(
 )
 {
 	int i;
+	time_t temptime;
 
 	if ( *disk )
 	{
@@ -43,7 +44,7 @@ void New(
 		pstatus->fcbs[i].nextIB = -1;
 	}
 	pstatus->fcbs[fcbNum-1].nextFCB = -1;
-	pstatus->free_fcb = 0;
+	pstatus->free_fcb = 1;
 	for ( i = 0; i < 4096; i ++ )
 	{
 		pstatus->ibs[i].nextIB = i + 1;
@@ -53,6 +54,16 @@ void New(
 	pstatus->free_ib = 0;
 	pstatus->full_fcb = -1;
 	// sync();
+	pstatus->full_fcb = 0;
+	pstatus->pwd = 0;
+	pstatus->fcbs[0].nextFCB = -1;
+	pstatus->fcbs[0].subFCB = -1;
+	pstatus->fcbs[0].flagFoder = True;
+	time(&temptime);
+	pstatus->fcbs[0].create = temptime;
+	pstatus->fcbs[0].lastChange = temptime;
+	pstatus->fcbs[0].size = 0;
+	pstatus->fcbs[0].nextIB = -1;
 	return ;
 }
 
