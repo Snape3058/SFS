@@ -11,3 +11,6 @@
 10	read	读文件
 11	write	写文件
 12	delete	删除文件
+13	tree
+14	fcbs
+
