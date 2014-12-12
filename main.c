@@ -3,7 +3,7 @@
 int cli(char * filename, char * pwd, char * cmdstr, char ** cmdpar)
 {
 	char cmd[1025];
-	printf("%s:%s ] ", filename, pwd);
+	printf("%s:%s %s ", filename, pwd, (disk)?"]":"X");
 	fgets(cmdstr, 1024, stdin);
 	sscanf(cmdstr, "%s", cmd);
 	for ( * cmdpar = cmdstr; 
@@ -66,12 +66,21 @@ int cli(char * filename, char * pwd, char * cmdstr, char ** cmdpar)
 	{
 		return 12;
 	}
-	else return 0;
+	else if ( ! strcmp(cmd, "tree") )
+	{
+  		return 13;
+	}
+	else if ( ! strcmp(cmd, "fcbs") )
+	{
+		return 14;
+	}
+
 /*	else if ( ! strcmp(cmd, "new") )
 	{
 		return 1;
 	}
 */
+	else return 0;
 }
 
 void cmderror()
@@ -87,22 +96,29 @@ int main(int argc, char * argv[])
 	char * cmdpar;
 	while ( ~ (cmd = cli(filename, pwd, cmdstr, &cmdpar)) )
 	{
-		printf("%d %s\n%s\n", cmd, cmdstr, cmdpar);
+		//printf("%d %s\n%s\n", cmd, cmdstr, cmdpar);
+		if ( cmd > 2 && ! disk )
+		{
+			printf("\033[31m>>> No SFS opened, please new or open an SFS first!\033[0m\n");
+			continue ;
+		}
 		switch ( cmd )
 		{
 			case  0: cmderror(); break;
 			case  1: New(filename, cmdpar, pwd, &disk, &status); break;
 			case  2: break;
 			case  3: Mkdir(pwd, cmdpar, disk, &status); break;
-			case  4: break;
-			case  5: break;
-			case  6: break;
+			case  4: rmdir(&status, cmdpar); break;
+			case  5: ls(&status); break;
+			case  6: cd(&status, cmdpar, pwd); break;
 			case  7: break;
 			case  8: break;
 			case  9: break;
 			case 10: break;
 			case 11: break;
 			case 12: break;
+			case 13: printf("/\n"); tree(&status, 0, 0); break;
+			case 14: fcbs(&status); break;
 		}
 	}
 	
