@@ -2,6 +2,7 @@
 #define _STRUCTURE_H
 
 #include <time.h>
+#include <string.h>
 
 const char True = 1;
 const char False = 0;
@@ -15,9 +16,11 @@ typedef struct IB
 
 typedef struct FCB
 {
+	int dadFCB;
 	int nextFCB;
 	int subFCB;
 	char * filename;
+	int strlen;
 	boolean flagFoder;
 	time_t create;
 	time_t lastChange;
@@ -39,4 +42,7 @@ typedef struct sysStatus
 
 void initFCB(sysStatus* pstatus, int x, boolean flagFoder);
 
+int checkExist(sysStatus * pstatus, char * name);
+
 #endif
+
