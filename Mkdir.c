@@ -9,12 +9,8 @@ void Mkdir(
 )
 {
 	char filename[1025];
+	int newfcbid;
 
-	if ( ! disk )
-	{
-		printf("\033[31m>>> No SFS opened, please new or open an SFS first!\033[0m\n");
-		return ;
-	}
 	if ( '\0' == cmdstr[0] || '\n' == cmdstr[0] )
 	{
 		printf(">>> mkdir [filename]\n"
@@ -24,8 +20,28 @@ void Mkdir(
 	else
 	{
 		sscanf(cmdstr, "%s", filename);
-		printf(">>> new [%s%s/]\n", pwd, filename);
+		if ( ~ checkExist(pstatus, filename) )
+		{
+			printf("\033[31m>>> Name exists!\033[0m\n");
+			return ;
+		}
+		if ( pstatus->pwd )
+		{
+			printf(">>> new [%s/%s]\n", pwd, filename);
+		}
+		else
+		{
+			printf(">>> new [%s%s]\n", pwd, filename);
+		}
 	}
 	/* new a directory in FCB */
-	
+	newfcbid = pstatus->free_fcb;
+	initFCB(pstatus, newfcbid, True);
+	pstatus->fcbs[newfcbid].nextFCB = pstatus->fcbs[pstatus->pwd].subFCB;
+	pstatus->fcbs[newfcbid].strlen = strlen(filename);
+	pstatus->fcbs[newfcbid].filename = (char *) malloc(pstatus->fcbs[newfcbid].strlen+2);
+	strcpy(pstatus->fcbs[newfcbid].filename, filename);
+	pstatus->fcbs[pstatus->pwd].subFCB = newfcbid;
+	return ;
 }
+
