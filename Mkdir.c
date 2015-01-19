@@ -24,6 +24,11 @@ void Mkdir(
 			printf("\033[31m>>> Name exists!\033[0m\n");
 			return ;
 		}
+		if ( strlen(filename) > 22 )
+		{
+			printf("\033[31m>> file name is too long.\033[0m\n");
+			return ;
+		}
 		if ( pstatus->pwd )
 		{
 			printf(">>> new [%s/%s]\n", pwd, filename);
