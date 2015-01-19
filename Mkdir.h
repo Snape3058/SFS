@@ -10,7 +10,6 @@
 void Mkdir(
 	char * pwd,
 	char * cmdstr,
-	char * disk,
 	sysStatus * pstatus
 );
 

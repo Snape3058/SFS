@@ -4,7 +4,6 @@
 void Mkdir(
 	char * pwd,
 	char * cmdstr,
-	char * disk,
 	sysStatus * pstatus
 )
 {
@@ -42,6 +41,7 @@ void Mkdir(
 	pstatus->fcbs[newfcbid].filename = (char *) malloc(pstatus->fcbs[newfcbid].strlen+2);
 	strcpy(pstatus->fcbs[newfcbid].filename, filename);
 	pstatus->fcbs[pstatus->pwd].subFCB = newfcbid;
+	writeFCB(newfcbid);
 	return ;
 }
 

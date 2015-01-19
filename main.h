@@ -14,7 +14,6 @@
 #include "tree.h"
 #include "fcbs.h"
 
-char * disk = NULL;
 sysStatus status;
 
 #endif

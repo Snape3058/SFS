@@ -4,14 +4,13 @@ void New(
 	char * filename, 
 	char * cmdstr, 
 	char * pwd, 
-	char ** disk, 
 	sysStatus * pstatus
 )
 {
 	int i;
 	time_t temptime;
 
-	if ( *disk )
+	if ( pstatus->disk )
 	{
 		printf("\033[31m>>> An SFS has already been opened!\033[0m\n");
 		return ;
@@ -27,14 +26,14 @@ void New(
 		sscanf(cmdstr, "%s", filename);
 		printf(">>> SFS restored to: %s\n", filename);
 	}
-	*disk = (char *) malloc (diskSize);
-	if ( NULL == disk )
+	pstatus->disk = (char *) malloc (diskSize);
+	if ( NULL == pstatus->disk )
 	{
 		printf("\033[31m>>> malloc failed!\033[0m\n");
 		return ;
 	}
 	/* arrange memory */
-	memset(*disk, 0, diskSize);
+	memset(pstatus->disk, 0, diskSize);
 	sprintf(pwd, "/");
 	/* init system status block */
 	for ( i = 0; i < fcbNum; i ++ )

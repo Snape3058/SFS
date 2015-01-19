@@ -3,7 +3,7 @@
 int cli(char * filename, char * pwd, char * cmdstr, char ** cmdpar)
 {
 	char cmd[1025];
-	printf("%s:%s %s ", filename, pwd, (disk)?"]":"X");
+	printf("%s:%s %s ", filename, pwd, (status.disk)?"]":"X");
 	fgets(cmdstr, 1024, stdin);
 	sscanf(cmdstr, "%s", cmd);
 	for ( * cmdpar = cmdstr; 
@@ -97,7 +97,7 @@ int main(int argc, char * argv[])
 	while ( ~ (cmd = cli(filename, pwd, cmdstr, &cmdpar)) )
 	{
 		//printf("%d %s\n%s\n", cmd, cmdstr, cmdpar);
-		if ( cmd > 2 && ! disk )
+		if ( cmd > 2 && ! status.disk )
 		{
 			printf("\033[31m>>> No SFS opened, please new or open an SFS first!\033[0m\n");
 			continue ;
@@ -105,9 +105,9 @@ int main(int argc, char * argv[])
 		switch ( cmd )
 		{
 			case  0: cmderror(); break;
-			case  1: New(filename, cmdpar, pwd, &disk, &status); break;
+			case  1: New(filename, cmdpar, pwd, &status); break;
 			case  2: break;
-			case  3: Mkdir(pwd, cmdpar, disk, &status); break;
+			case  3: Mkdir(pwd, cmdpar, &status); break;
 			case  4: rmdir(&status, cmdpar); break;
 			case  5: ls(&status); break;
 			case  6: cd(&status, cmdpar, pwd); break;

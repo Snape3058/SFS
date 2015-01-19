@@ -13,7 +13,6 @@ void New(
 	char * filename, 
 	char * cmdstr, 
 	char * pwd, 
-	char ** disk,
 	sysStatus * pstatus
 );
 
