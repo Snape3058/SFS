@@ -5,6 +5,6 @@
 
 #include "structure.h"
 
-void fcbs(sysStatus * );
+void fcbs(sysStatus * , char *);
 
 #endif

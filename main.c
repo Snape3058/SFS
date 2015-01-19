@@ -74,6 +74,10 @@ int cli(char * filename, char * pwd, char * cmdstr, char ** cmdpar)
 	{
 		return 14;
 	}
+	else if ( ! strcmp(cmd, "readfcb") )
+	{
+		return 15;
+	}
 
 /*	else if ( ! strcmp(cmd, "new") )
 	{
@@ -94,6 +98,8 @@ int main(int argc, char * argv[])
 	int cmd;
 	char cmdstr[1025], filename[1024] = "(NULL)", pwd[1024] = "";
 	char * cmdpar;
+	FCB tempFCB;
+	int tempInt;
 	while ( ~ (cmd = cli(filename, pwd, cmdstr, &cmdpar)) )
 	{
 		//printf("%d %s\n%s\n", cmd, cmdstr, cmdpar);
@@ -118,7 +124,12 @@ int main(int argc, char * argv[])
 			case 11: break;
 			case 12: break;
 			case 13: printf("/\n"); tree(&status, 0, 0); break;
-			case 14: fcbs(&status); break;
+			case 14: fcbs(&status, cmdpar); break;
+			case 15:
+				sscanf(cmdpar, "%d", &tempInt);
+				readFCB(&status, tempInt, &tempFCB);
+				printFCB(tempFCB);
+				break;
 		}
 	}
 	

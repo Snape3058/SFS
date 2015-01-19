@@ -56,6 +56,7 @@ void New(
 	pstatus->full_fcb = 0;
 	pstatus->pwd = 0;
 	initFCB(pstatus, 0, True);
+	writeFCB(pstatus, 0);
 	return ;
 }
 

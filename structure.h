@@ -3,6 +3,8 @@
 
 #include <time.h>
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 const char True = 1;
 const char False = 0;
@@ -20,7 +22,7 @@ typedef struct FCB
 	int nextFCB;
 	int subFCB;
 	char * filename;
-	int strlen;
+	int strlen;			// (char *) malloc(pstatus->fcbs[newfcbid].strlen+2);
 	boolean flagFoder;
 	time_t create;
 	time_t lastChange;
@@ -32,6 +34,7 @@ const int fcbNum = 448;
 
 typedef struct sysStatus
 {
+	char * disk = NULL;
 	FCB fcbs[fcbNum];
 	IB ibs[4096];
 	int free_fcb;
@@ -43,6 +46,12 @@ typedef struct sysStatus
 void initFCB(sysStatus* pstatus, int x, boolean flagFoder);
 
 int checkExist(sysStatus * pstatus, char * name);
+
+void writeFCB(sysStatus * pstatus, int fcbid);
+
+void readFCB(sysStatus * pstatus, int fcbid, FCB * dest);
+
+void printFCB(FCB buf);
 
 #endif
 
