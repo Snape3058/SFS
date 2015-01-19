@@ -8,6 +8,7 @@
 
 const char True = 1;
 const char False = 0;
+const int diskSize = 2 * 1024 * 1024;
 typedef char boolean;
 
 typedef struct IB
@@ -42,6 +43,8 @@ typedef struct sysStatus
 	int full_fcb;
 	int pwd;
 }sysStatus;
+
+void freeFCB(sysStatus * pstatus, int x);
 
 void initFCB(sysStatus* pstatus, int x, boolean flagFoder);
 

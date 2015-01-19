@@ -7,8 +7,6 @@
 
 #include "structure.h"
 
-const int diskSize = 2 * 1024 * 1024;
-
 void New(
 	char * filename, 
 	char * cmdstr, 
