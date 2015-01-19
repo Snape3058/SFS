@@ -78,6 +78,10 @@ int cli(char * filename, char * pwd, char * cmdstr, char ** cmdpar)
 	{
 		return 15;
 	}
+	else if ( ! strcmp(cmd, "readdisk") )
+	{
+		return 16;
+	}
 
 /*	else if ( ! strcmp(cmd, "new") )
 	{
@@ -90,6 +94,33 @@ int cli(char * filename, char * pwd, char * cmdstr, char ** cmdpar)
 void cmderror()
 {
 	printf("\033[31m>>> Command cannot be understand.\033[0m\n");
+	return ;
+}
+
+long min(long a, long b)
+{
+	return (a < b)?(a):(b);
+}
+
+long max(long a, long b)
+{
+	return (a > b)?(a):(b);
+}
+
+void readDisk(char * cmdstr)
+{
+	int i, j;
+	int begin = 0, end = (diskSize >> 4);
+	sscanf(cmdstr, "%x%x", &begin, &end);
+	for ( i = begin; i < min(end, (diskSize >> 4)); i ++ )
+	{
+		printf("%05X :", i);
+		for ( j = 0; j < 16; j ++ )
+		{
+			printf("  %02X", (unsigned char) status.disk[(i << 4) + j]);
+		}
+		putchar('\n');
+	}
 	return ;
 }
 
@@ -130,6 +161,7 @@ int main(int argc, char * argv[])
 				readFCB(&status, tempInt, &tempFCB);
 				printFCB(tempFCB);
 				break;
+			case 16: readDisk(cmdpar); break;
 		}
 	}
 	
