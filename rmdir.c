@@ -5,7 +5,6 @@ void rmdir(sysStatus * pstatus, char * cmdstr)
 	char filename[1025];
 	int i, * last;
 
-
 	if ( '\0' == cmdstr[0] || '\n' == cmdstr[0] )
 	{
 		printf(">>> rmdir [filename]\n"
@@ -36,7 +35,8 @@ void rmdir(sysStatus * pstatus, char * cmdstr)
 			pstatus->fcbs[i].create = 0;
 			pstatus->fcbs[i].lastChange = 0;
 			pstatus->fcbs[i].flagFoder = False;
-			pstatus->free_fcb = i;
+			freeFCB(pstatus, i);
+			writeFCB(pstatus, i);
 			return ;
 		}
 	}

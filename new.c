@@ -38,6 +38,7 @@ void New(
 	/* init system status block */
 	for ( i = 0; i < fcbNum; i ++ )
 	{
+		pstatus->fcbs[i].dadFCB = -1;
 		pstatus->fcbs[i].nextFCB = i + 1;
 		pstatus->fcbs[i].subFCB = -1;
 		pstatus->fcbs[i].nextIB = -1;
@@ -56,7 +57,10 @@ void New(
 	pstatus->full_fcb = 0;
 	pstatus->pwd = 0;
 	initFCB(pstatus, 0, True);
-	writeFCB(pstatus, 0);
+	for ( i = 0; i < fcbNum; i ++ )
+	{
+		writeFCB(pstatus, i);
+	}
 	return ;
 }
 

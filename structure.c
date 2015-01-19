@@ -1,10 +1,28 @@
 #include "structure.h"
 
+void copyContent(char ** dp, char ** mp, int size)
+{
+	for ( int i = 0; i < size; i ++ )
+	{
+		*(*dp) = *(*mp);
+		(*dp) ++;
+		(*mp) ++;
+	}
+	return ;
+}
+
+void freeFCB(sysStatus * pstatus, int x)
+{
+	char * dp = pstatus->disk, * mp;
+	pstatus->free_fcb = x;	
+	mp = (char*) &(pstatus->free_fcb);
+	copyContent(&dp, &mp, sizeof(int));
+}
+
 void initFCB(sysStatus * pstatus, int x, boolean flagFoder)
 {
 	time_t temptime;
-
-	pstatus->free_fcb = pstatus->fcbs[x].nextFCB;
+	freeFCB(pstatus, pstatus->fcbs[x].nextFCB);
 	pstatus->fcbs[x].dadFCB = pstatus->pwd;
 	pstatus->fcbs[x].nextFCB = -1;
 	pstatus->fcbs[x].subFCB = -1;
@@ -28,17 +46,6 @@ int checkExist(sysStatus * pstatus, char * name)
 		}
 	}
 	return -1;
-}
-
-void copyContent(char ** dp, char ** mp, int size)
-{
-	for ( int i = 0; i < size; i ++ )
-	{
-		*(*dp) = *(*mp);
-		(*dp) ++;
-		(*mp) ++;
-	}
-	return ;
 }
 
 void writeFCB(sysStatus * pstatus, int fcbid)
