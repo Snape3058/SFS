@@ -45,12 +45,12 @@ void New(
 	}
 	pstatus->fcbs[fcbNum-1].nextFCB = -1;
 	pstatus->free_fcb = 0;
-	for ( i = 0; i < 4096; i ++ )
+	for ( i = 0; i < ibNum; i ++ )
 	{
-		pstatus->ibs[i].nextIB = i + 1;
-		pstatus->ibs[i].contentBlockID = -1;
+		writeIBp(pstatus, i, i+1);
+		pstatus->ibs[i].contentBlockID = 512*(64+i)+sizeof(int);
 	}
-	pstatus->ibs[4095].nextIB = -1;
+	writeIBp(pstatus, ibNum-1, -1);
 	pstatus->free_ib = 0;
 	pstatus->full_fcb = -1;
 	// sync();

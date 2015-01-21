@@ -32,12 +32,12 @@ typedef struct FCB
 }FCB;
 
 const int fcbNum = 448;
-
+const int ibNum = 4096-64;
 typedef struct sysStatus
 {
 	char * disk = NULL;
 	FCB fcbs[fcbNum];
-	IB ibs[4096];
+	IB ibs[ibNum];
 	int free_fcb;
 	int free_ib;
 	int full_fcb;
@@ -55,6 +55,8 @@ void writeFCB(sysStatus * pstatus, int fcbid);
 void readFCB(sysStatus * pstatus, int fcbid, FCB * dest);
 
 void printFCB(FCB buf);
+
+void writeIBp(sysStatus* pstatus, int id, int next);
 
 #endif
 

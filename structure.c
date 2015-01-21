@@ -130,3 +130,12 @@ void printFCB(FCB buf)
 	);
 
 }
+
+void writeIBp(sysStatus * pstatus, int id, int next)
+{
+	char * dp = pstatus->disk + 512*(64+id), 
+		 * mp = (char*) &next;
+	pstatus->ibs[id].nextIB = next;
+	copyContent(&dp, &mp, sizeof(int));
+}
+
