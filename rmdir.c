@@ -19,6 +19,11 @@ void rmdir(sysStatus * pstatus, char * cmdstr)
 	{
 		if ( ! strcmp(filename, pstatus->fcbs[i].filename) )
 		{
+			if ( ! pstatus->fcbs[i].flagFoder )
+			{
+				printf("\033[31m>>> Not a Folder!\033[0m\n");
+				return ;
+			}
 			if ( ~ pstatus->fcbs[i].subFCB )
 			{
 				printf("\033[31m>>> Folder is not empry!\033[0m\n");
