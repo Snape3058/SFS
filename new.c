@@ -53,7 +53,6 @@ void New(
 	writeIBp(pstatus, ibNum-1, -1);
 	pstatus->free_ib = 0;
 	pstatus->full_fcb = -1;
-	// sync();
 	pstatus->full_fcb = 0;
 	pstatus->pwd = 0;
 	initFCB(pstatus, 0, True);
