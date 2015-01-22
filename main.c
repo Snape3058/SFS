@@ -86,6 +86,10 @@ int cli(char * filename, char * pwd, char * cmdstr, char ** cmdpar)
 	{
 		return 17;
 	}
+	else if ( ! strcmp(cmd, "sync") )
+	{
+		return 18;
+	}
 
 /*	else if ( ! strcmp(cmd, "new") )
 	{
@@ -130,10 +134,12 @@ void readDisk(char * cmdstr)
 
 void printStatus()
 {
-	printf("free_fcb: %d\n"
+	printf("disk:     %s\n"
+		   "free_fcb: %d\n"
 		   "free_ib:  %d\n"
 		   "full_fcb: %d\n"
-		   "pwd:      %d\n", 
+		   "pwd:      %d\n",
+		   status.disk?"memory":"(NULL)",
 		   status.free_fcb, status.free_ib, status.full_fcb, status.pwd);
 	return ;
 }
@@ -166,8 +172,11 @@ int main(int argc, char * argv[])
 		switch ( cmd )
 		{
 			case  0: cmderror(); break;
-			case  1: New(filename, cmdpar, pwd, &status); break;
-			case  2: break;
+			case  1: 
+				New(filename, cmdpar, pwd, &status); 
+				sync(&status, filename); 
+				break;
+			case  2: load(&status, cmdpar, filename, pwd); break;
 			case  3: Mkdir(pwd, cmdpar, &status); break;
 			case  4: rmdir(&status, cmdpar); break;
 			case  5: ls(&status); break;
@@ -187,9 +196,10 @@ int main(int argc, char * argv[])
 				break;
 			case 16: readDisk(cmdpar); break;
 			case 17: printStatus(); break;
+			case 18: sync(&status, filename); break;
 		}
 	}
-	
+	sync(&status, filename);
 	return 0;
 }
 
