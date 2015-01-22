@@ -167,3 +167,21 @@ int newIB(sysStatus * pstatus)
 	writeIBp(pstatus, ret, -1);
 	return ret;
 }
+
+void readIB(sysStatus * pstatus, int id)
+{
+	char * dp = pstatus->disk + 512*(64+id),
+		 * mp = (char*) &pstatus->ibs[id].nextIB;
+	copyContent(&mp, &dp, sizeof(int));
+}
+
+void readStatus(sysStatus * pstatus)
+{
+	char * dp, * mp;
+	dp = pstatus->disk;
+	mp = (char*) &pstatus->free_fcb;
+	copyContent(&mp, &dp, sizeof(int));
+	mp = (char*) &pstatus->free_ib;
+	copyContent(&mp, &dp, sizeof(int));
+	pstatus->full_fcb = 0;
+}

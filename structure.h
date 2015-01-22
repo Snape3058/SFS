@@ -67,5 +67,9 @@ void clearIB(sysStatus * pstatus, int id);
 
 int newIB(sysStatus * pstatus);
 
+void readIB(sysStatus * pstatus, int id);
+
+void readStatus(sysStatus * pstatus);
+
 #endif
 
