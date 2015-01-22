@@ -139,3 +139,31 @@ void writeIBp(sysStatus * pstatus, int id, int next)
 	copyContent(&dp, &mp, sizeof(int));
 }
 
+void freeIBp(sysStatus * pstatus, int id)
+{
+	char * dp = pstatus->disk + sizeof(int),
+		 * mp = (char*) &id;
+	pstatus->free_ib = id;
+	copyContent(&dp, &mp, sizeof(int));
+}
+
+void clearIB(sysStatus * pstatus, int id)
+{
+	int i;
+	if ( -1 == id )
+	{
+		return ;
+	}
+	for ( i = id; ~ pstatus->ibs[i].nextIB; i = pstatus->ibs[i].nextIB )
+		;
+	writeIBp(pstatus, i, pstatus->free_ib);
+	freeIBp(pstatus, id);
+}
+
+int newIB(sysStatus * pstatus)
+{
+	int ret = pstatus->free_ib;
+	freeIBp(pstatus, pstatus->ibs[ret].nextIB);
+	writeIBp(pstatus, ret, -1);
+	return ret;
+}

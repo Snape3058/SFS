@@ -9,6 +9,8 @@
 const char True = 1;
 const char False = 0;
 const int diskSize = 2 * 1024 * 1024;
+const int contentSize = 512 - sizeof(int);
+
 typedef char boolean;
 
 typedef struct IB
@@ -42,6 +44,7 @@ typedef struct sysStatus
 	int free_ib;
 	int full_fcb;
 	int pwd;
+	boolean opened;
 }sysStatus;
 
 void freeFCB(sysStatus * pstatus, int x);
@@ -57,6 +60,12 @@ void readFCB(sysStatus * pstatus, int fcbid, FCB * dest);
 void printFCB(FCB buf);
 
 void writeIBp(sysStatus* pstatus, int id, int next);
+
+void freeIBp(sysStatus* pstatus, int id);
+
+void clearIB(sysStatus * pstatus, int id);
+
+int newIB(sysStatus * pstatus);
 
 #endif
 
