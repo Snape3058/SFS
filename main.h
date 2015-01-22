@@ -13,6 +13,11 @@
 #include "cd.h"
 #include "tree.h"
 #include "fcbs.h"
+#include "open_close.h"
+#include "create.h"
+#include "delete.h"
+#include "read.h"
+#include "write.h"
 
 sysStatus status;
 

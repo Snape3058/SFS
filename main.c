@@ -3,7 +3,7 @@
 int cli(char * filename, char * pwd, char * cmdstr, char ** cmdpar)
 {
 	char cmd[1025];
-	printf("%s:%s %s ", filename, pwd, (status.disk)?"]":"X");
+	printf("%s:%s %s ", filename, pwd, (status.disk)?(status.opened?":\"":"]"):"X");
 	fgets(cmdstr, 1024, stdin);
 	sscanf(cmdstr, "%s", cmd);
 	for ( * cmdpar = cmdstr; 
@@ -50,7 +50,7 @@ int cli(char * filename, char * pwd, char * cmdstr, char ** cmdpar)
 	{
 		return 8;
 	}
-	else if ( ! strcmp(cmd, "close") )
+	else if ( ! strcmp(cmd, "close") || ! strcmp(cmd, "\"") )
 	{
 		return 9;
 	}
@@ -62,7 +62,7 @@ int cli(char * filename, char * pwd, char * cmdstr, char ** cmdpar)
 	{
 		return 11;
 	}
-	else if ( ! strcmp(cmd, "delete") )
+	else if ( ! strcmp(cmd, "delete") || ! strcmp(cmd, "rm") )
 	{
 		return 12;
 	}
@@ -81,6 +81,10 @@ int cli(char * filename, char * pwd, char * cmdstr, char ** cmdpar)
 	else if ( ! strcmp(cmd, "readdisk") )
 	{
 		return 16;
+	}
+	else if ( ! strcmp(cmd, "status") )
+	{
+		return 17;
 	}
 
 /*	else if ( ! strcmp(cmd, "new") )
@@ -124,6 +128,16 @@ void readDisk(char * cmdstr)
 	return ;
 }
 
+void printStatus()
+{
+	printf("free_fcb: %d\n"
+		   "free_ib:  %d\n"
+		   "full_fcb: %d\n"
+		   "pwd:      %d\n", 
+		   status.free_fcb, status.free_ib, status.full_fcb, status.pwd);
+	return ;
+}
+
 int main(int argc, char * argv[])
 {
 	int cmd;
@@ -131,13 +145,23 @@ int main(int argc, char * argv[])
 	char * cmdpar;
 	FCB tempFCB;
 	int tempInt;
-	while ( ~ (cmd = cli(filename, pwd, cmdstr, &cmdpar)) )
+	while ( ~ (cmd = cli(filename, pwd, cmdstr, &cmdpar)) || status.opened )
 	{
 		//printf("%d %s\n%s\n", cmd, cmdstr, cmdpar);
 		if ( cmd > 2 && ! status.disk )
 		{
 			printf("\033[31m>>> No SFS opened, please new or open an SFS first!\033[0m\n");
 			continue ;
+		}
+		if ( status.opened && (cmd < 9 || cmd == 12) )
+		{
+			printf("\033[31m>>> File opened, please close the file first!\033[0m\n");
+			continue ;
+		}
+		if ( ! status.opened && ( 9 <= cmd && cmd <= 11) )
+		{
+			printf("\033[31m>>> No file opened, please open a file first\033[0m\n");
+			continue;
 		}
 		switch ( cmd )
 		{
@@ -148,12 +172,12 @@ int main(int argc, char * argv[])
 			case  4: rmdir(&status, cmdpar); break;
 			case  5: ls(&status); break;
 			case  6: cd(&status, cmdpar, pwd); break;
-			case  7: break;
-			case  8: break;
-			case  9: break;
-			case 10: break;
-			case 11: break;
-			case 12: break;
+			case  7: create(pwd, cmdpar, &status); break;
+			case  8: open(&status, cmdpar, pwd); break;
+			case  9: close(&status, cmdpar, pwd); break;
+			case 10: read(&status, cmdpar); break;
+			case 11: write(&status, cmdpar); break;
+			case 12: rm(&status, cmdpar); break;
 			case 13: printf("/\n"); tree(&status, 0, 0); break;
 			case 14: fcbs(&status, cmdpar); break;
 			case 15:
@@ -162,6 +186,7 @@ int main(int argc, char * argv[])
 				printFCB(tempFCB);
 				break;
 			case 16: readDisk(cmdpar); break;
+			case 17: printStatus(); break;
 		}
 	}
 	
