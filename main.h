@@ -18,6 +18,7 @@
 #include "delete.h"
 #include "read.h"
 #include "write.h"
+#include "sync_load.h"
 
 sysStatus status;
 
