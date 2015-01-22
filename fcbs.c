@@ -45,5 +45,11 @@ void fcbs(sysStatus * pstatus, char * cmdstr)
 			pstatus->fcbs[id].size,
 			pstatus->fcbs[id].nextIB,
 			pstatus->fcbs[id].filename);
+		printf("[IB]");
+		for ( i = pstatus->fcbs[id].nextIB; i != -1 ; i = pstatus->ibs[i].nextIB )
+		{
+			printf("->%d", i);
+		}
+		putchar('\n');
 	}
 }
