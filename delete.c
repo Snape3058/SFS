@@ -3,7 +3,7 @@
 void rm(sysStatus * pstatus, char * cmdstr)
 {
 	char filename[1025];
-	int i, * last;
+	int i, last;
 
 	if ( '\0' == cmdstr[0] || '\n' == cmdstr[0] )
 	{
@@ -15,7 +15,7 @@ void rm(sysStatus * pstatus, char * cmdstr)
 	{
 		sscanf(cmdstr, "%s", filename);
 	}
-	for ( i = pstatus->fcbs[pstatus->pwd].subFCB, last = &(pstatus->fcbs[pstatus->pwd].subFCB); i != -1; last = &(pstatus->fcbs[i].nextFCB), i = pstatus->fcbs[i].nextFCB )
+	for ( i = pstatus->fcbs[pstatus->pwd].subFCB, last = -1; i != -1; i = pstatus->fcbs[i].nextFCB )
 	{
 		if ( ! strcmp(filename, pstatus->fcbs[i].filename) )
 		{
@@ -24,7 +24,16 @@ void rm(sysStatus * pstatus, char * cmdstr)
 				printf("\033[31m>>> Not a file!\033[0m\n");
 				return ;
 			}
-			*last = pstatus->fcbs[i].nextFCB;
+			if ( -1 == last )
+			{
+				pstatus->fcbs[pstatus->pwd].subFCB = pstatus->fcbs[i].nextFCB;
+				writeFCB(pstatus, pstatus->pwd);
+			}
+			else
+			{
+				pstatus->fcbs[last].nextFCB = pstatus->fcbs[i].nextFCB;
+				writeFCB(pstatus, last);
+			}
 			pstatus->fcbs[i].dadFCB = 
 			pstatus->fcbs[i].subFCB = -1;
 			pstatus->fcbs[i].strlen = 
@@ -36,10 +45,12 @@ void rm(sysStatus * pstatus, char * cmdstr)
 			pstatus->fcbs[i].lastChange = 0;
 			pstatus->fcbs[i].flagFoder = False;
 			freeFCB(pstatus, i);
-			writeFCB(pstatus, i);
 			clearIB(pstatus, pstatus->fcbs[i].nextIB);
+			pstatus->fcbs[i].nextIB = -1;
+			writeFCB(pstatus, i);
 			return ;
 		}
+		last = i;
 	}
 	printf("\033[31m>>> File does not exist!\033[0m\n");
 	return ;

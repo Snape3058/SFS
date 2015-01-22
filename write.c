@@ -8,6 +8,7 @@ void writeChar(sysStatus * pstatus, int i, char ch)
 	if ( -1 == pstatus->fcbs[pstatus->pwd].nextIB )
 	{
 		blockID = pstatus->fcbs[pstatus->pwd].nextIB = newIB(pstatus);
+		writeFCB(pstatus, pstatus->pwd);
 	}
 	else
 	{
@@ -62,5 +63,6 @@ void write(sysStatus * pstatus, char * cmdstr)
 	{
 		pstatus->fcbs[pstatus->pwd].size = p;
 	}
+	writeFCB(pstatus, pstatus->pwd);
 	return ;
 }

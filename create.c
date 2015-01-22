@@ -46,6 +46,7 @@ void create(
 	strcpy(pstatus->fcbs[newfcbid].filename, filename);
 	pstatus->fcbs[pstatus->pwd].subFCB = newfcbid;
 	writeFCB(pstatus, newfcbid);
+	writeFCB(pstatus, pstatus->pwd);
 	return ;
 }
 
