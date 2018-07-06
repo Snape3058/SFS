@@ -1,6 +1,11 @@
 cc = g++
+clang = clang++
 
 objs = ${patsubst %.c, %.o, $(wildcard *.c)}
+lls = ${patsubst %.c, %.ll, $(wildcard *.c)}
+
+.PHONY: all
+all: sfs sfs.ll
 
 sfs: $(objs)
 	$(cc) $(objs) -g -o sfs
@@ -8,13 +13,12 @@ sfs: $(objs)
 $(objs): %.o: %.c %.h structure.h
 	$(cc) -c $< -o $@ -g
 
+sfs.ll: $(lls)
+	llvm-link -S -o sfs.ll $(lls)
+
+$(lls): %.ll: %.c %.h structure.h
+	$(clang) -emit-llvm -S -o $@ $<
+
 .PHONY: clean
-clean: 
-	rm *.o
-
-.PHONY: rebuild
-rebuild:
-	rm *.o sfs; make
-
-echo:
-	@echo $(objs)
+clean:
+	rm -f *.o *.ll sfs
